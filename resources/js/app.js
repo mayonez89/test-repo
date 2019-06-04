@@ -1,32 +1,56 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
-
 window.Vue = require('vue');
+import VueRouter from 'vue-router'
+import { routes } from './routes'
+import VeeValidate from 'vee-validate';
+import Axios from 'axios'
+import 'es6-promise/auto'
+import store from './store'
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+if (store.getters.user.token) {
+    axios.defaults.headers.common['Authorization'] = store.getters.user.token
+}
+axios.defaults.baseURL = process.env.MIX_APP_URL
 
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+Vue.use(VueRouter)
+const router = new VueRouter({
+    mode: 'history',
+    routes,
+})
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// TODO refactor routing
+router.beforeEach((to, from, next) => {
+    const publicPages = [
+        '/login',
+        '/register',
+        '/'
+    ]
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+    const authRequired = !publicPages.includes(to.path)
+    if (authRequired && !store.getters.user.token) {
+        console.log('not authenticated')
+        return next('/login');
+    }
+    if (to.path === '/' && store.getters.user.token) {
+        return next('/app')
+    }
+    next();
+})
+
+Vue.use(VeeValidate)
+
+Vue.component('public-layout', require('./Layouts/PublicLayout.vue').default);
+Vue.component('app-layout', require('./Layouts/AppLayout.vue').default);
+
+import { mapGetters } from 'vuex'
 
 const app = new Vue({
     el: '#app',
-});
+    router,
+    store,
+    computed: {
+        ...mapGetters(['layout'])
+    }
+})
+
+export { app }
