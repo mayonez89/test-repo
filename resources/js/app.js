@@ -8,7 +8,7 @@ import 'es6-promise/auto'
 import store from './store'
 
 if (store.getters.user.token) {
-    axios.defaults.headers.common['Authorization'] = store.getters.user.token
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + store.getters.user.token
 }
 axios.defaults.baseURL = process.env.MIX_APP_URL
 

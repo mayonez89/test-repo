@@ -11,7 +11,8 @@ export default new Vuex.Store({
             token: localStorage.getItem('token')
         },
         loginAttemptMessage: false,
-        registerAttemptMessage: false
+        registerAttemptMessage: false,
+        projects: []
     },
     mutations: {
         setLayout (state, layout) {
@@ -21,7 +22,7 @@ export default new Vuex.Store({
             state.user.token = token
             if (token) {
                 localStorage.setItem('token', token)
-                axios.defaults.headers.common['Authorization'] = token
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
             } else {
                 localStorage.removeItem('token')
                 axios.defaults.headers.common['Authorization'] = ''
@@ -32,6 +33,15 @@ export default new Vuex.Store({
         },
         setRegisterAttemptMessage (state, message) {
             state.registerAttemptMessage = message
+        },
+        setProjects (state, payload) {
+            state.projects = payload
+        },
+        setProject (state, payload) {
+            let projects = _.clone(state.projects)
+            let projectIndex = projects.findIndex((proj) => proj.id === payload.id)
+            projects[projectIndex] = payload
+            state.projects = projects
         }
     },
     actions: {
@@ -90,12 +100,40 @@ export default new Vuex.Store({
         logout ( {commit} ) {
             commit('setToken', false)
             commit('setLayout', 'public')
+        },
+        fetchProjects ({commit}) {
+            return new Promise((resolve, reject) => {
+                axios({
+                    url: 'api/projects',
+                    method: 'GET'
+                }).then(resp => {
+                    commit('setProjects', resp.data)
+                    resolve(resp);
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        updateProject({commit}, project) {
+            return new Promise((resolve, reject) => {
+                axios({
+                    url: 'api/projects/' + project.id,
+                    data: project,
+                    method: 'PUT'
+                }).then(resp => {
+                    commit('setProject', project)
+                    resolve(resp);
+                }).catch(err => {
+                    reject(err)
+                })
+            })
         }
     },
     getters: {
         layout: state => state.layout,
         user: state => state.user,
         loginAttemptMessage: state => state.loginAttemptMessage,
-        registerAttemptMessage: state => state.registerAttemptMessage
+        registerAttemptMessage: state => state.registerAttemptMessage,
+        projects: state => state.projects,
     }
 })
