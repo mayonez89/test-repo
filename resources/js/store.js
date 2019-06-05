@@ -10,7 +10,8 @@ export default new Vuex.Store({
         user: {
             token: localStorage.getItem('token')
         },
-        loginAttemptMessage: false
+        loginAttemptMessage: false,
+        registerAttemptMessage: false
     },
     mutations: {
         setLayout (state, layout) {
@@ -28,26 +29,61 @@ export default new Vuex.Store({
         },
         setLoginAttemptMessage (state, message) {
             state.loginAttemptMessage = message
+        },
+        setRegisterAttemptMessage (state, message) {
+            state.registerAttemptMessage = message
         }
     },
     actions: {
+        register ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                axios({
+                    url: 'api/register',
+                    data: data,
+                    method: 'POST'
+                }).then(resp => {
+                    let token = resp.data.success.token
+                    commit('setToken', token)
+                    commit('setLayout', 'app')
+                    commit('setRegisterAttemptMessage', '')
+                    resolve(resp);
+                }).catch(err => {
+                    let statusCode = err.response.status
+                    let responseData = err.response.data
+                    if (statusCode === 401) {
+                        commit('setRegisterAttemptMessage', 'Registration failed')
+                    }
+                    else if (statusCode === 422) {
+                        if (typeof responseData.errors.email !== 'undefined') {
+                            commit('setRegisterAttemptMessage', responseData.errors.email[0])
+                        }
+                        else {
+                            commit('setRegisterAttemptMessage', 'Invalid data for registration')
+                        }
+                    } else {
+                        commit('setRegisterAttemptMessage', 'Registration failed')
+                    }
+                    reject(err)
+                })
+            })
+        },
         login ({commit}, data) {
             return new Promise((resolve, reject) => {
                 axios({
                     url: 'api/login',
                     data: data,
                     method: 'POST'
-                }).catch(err => {
-                    if (err.response.status === 401) {
-                        commit('setLoginAttemptMessage', 'Authentication failed')
-                    }
-                    reject(err)
                 }).then(resp => {
                     let token = resp.data.success.token
                     commit('setToken', token)
                     commit('setLayout', 'app')
                     commit('setLoginAttemptMessage', '')
                     resolve(resp);
+                }).catch(err => {
+                    if (err.response.status === 401) {
+                        commit('setLoginAttemptMessage', 'Authentication failed')
+                    }
+                    reject(err)
                 })
             })
         },
@@ -59,6 +95,7 @@ export default new Vuex.Store({
     getters: {
         layout: state => state.layout,
         user: state => state.user,
-        loginAttemptMessage: state => state.loginAttemptMessage
+        loginAttemptMessage: state => state.loginAttemptMessage,
+        registerAttemptMessage: state => state.registerAttemptMessage
     }
 })

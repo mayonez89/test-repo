@@ -1880,27 +1880,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 isValid = _context.sent;
 
                 if (!isValid) {
-                  _context.next = 7;
+                  _context.next = 13;
                   break;
                 }
 
-                _context.next = 6;
+                _context.prev = 4;
+                _context.next = 7;
                 return this.login({
                   email: this.email,
                   password: this.password
                 });
 
-              case 6:
+              case 7:
                 this.$router.push({
                   path: '/app'
                 });
+                _context.next = 13;
+                break;
 
-              case 7:
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](4);
+                console.log(_context.t0);
+
+              case 13:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this);
+        }, _callee, this, [[4, 10]]);
       }));
 
       function loginAttempt() {
@@ -1923,13 +1931,123 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      name: '',
+      email: '',
+      password: '',
+      c_password: ''
+    };
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['registerAttemptMessage'])),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(['register']), {
+    registerAttempt: function () {
+      var _registerAttempt = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var isValid;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return this.$validator.validateAll();
+
+              case 2:
+                isValid = _context.sent;
+
+                if (!isValid) {
+                  _context.next = 13;
+                  break;
+                }
+
+                _context.prev = 4;
+                _context.next = 7;
+                return this.register({
+                  name: this.name,
+                  email: this.email,
+                  password: this.password,
+                  c_password: this.c_password
+                });
+
+              case 7:
+                this.$router.push({
+                  path: '/app'
+                });
+                _context.next = 13;
+                break;
+
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](4);
+                console.log(_context.t0);
+
+              case 13:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[4, 10]]);
+      }));
+
+      function registerAttempt() {
+        return _registerAttempt.apply(this, arguments);
+      }
+
+      return registerAttempt;
+    }()
+  })
+});
 
 /***/ }),
 
@@ -50460,7 +50578,161 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    register page\n")])
+  return _c("div", [
+    _c(
+      "form",
+      {
+        attrs: { action: "" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.registerAttempt($event)
+          }
+        }
+      },
+      [
+        _c("div", [_vm._v(_vm._s(_vm.errors.first("full_name")))]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.name,
+              expression: "name"
+            },
+            {
+              name: "validate",
+              rawName: "v-validate",
+              value: "required",
+              expression: "'required'"
+            }
+          ],
+          attrs: {
+            name: "full_name",
+            "data-vv-validate-on": "none",
+            type: "text",
+            placeholder: "Full Name"
+          },
+          domProps: { value: _vm.name },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.name = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("div", [_vm._v(_vm._s(_vm.errors.first("email")))]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.email,
+              expression: "email"
+            },
+            {
+              name: "validate",
+              rawName: "v-validate",
+              value: "required|email",
+              expression: "'required|email'"
+            }
+          ],
+          attrs: {
+            name: "email",
+            "data-vv-validate-on": "none",
+            type: "text",
+            placeholder: "Email"
+          },
+          domProps: { value: _vm.email },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.email = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("div", [_vm._v(_vm._s(_vm.errors.first("password")))]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.password,
+              expression: "password"
+            },
+            {
+              name: "validate",
+              rawName: "v-validate",
+              value: "required|min:6",
+              expression: "'required|min:6'"
+            }
+          ],
+          attrs: {
+            name: "password",
+            "data-vv-validate-on": "none",
+            type: "password"
+          },
+          domProps: { value: _vm.password },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.password = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("div", [_vm._v(_vm._s(_vm.errors.first("confirmation_password")))]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.c_password,
+              expression: "c_password"
+            },
+            {
+              name: "validate",
+              rawName: "v-validate",
+              value: "required|confirmed:password",
+              expression: "'required|confirmed:password'"
+            }
+          ],
+          attrs: {
+            name: "confirmation_password",
+            "data-vv-validate-on": "none",
+            type: "password"
+          },
+          domProps: { value: _vm.c_password },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.c_password = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("input", { attrs: { type: "submit", value: "Register" } }),
+        _vm._v(" "),
+        _vm.registerAttemptMessage
+          ? _c("div", [_vm._v(_vm._s(_vm.registerAttemptMessage))])
+          : _vm._e()
+      ]
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -66946,7 +67218,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__
     user: {
       token: localStorage.getItem('token')
     },
-    loginAttemptMessage: false
+    loginAttemptMessage: false,
+    registerAttemptMessage: false
   },
   mutations: {
     setLayout: function setLayout(state, layout) {
@@ -66965,33 +67238,69 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__
     },
     setLoginAttemptMessage: function setLoginAttemptMessage(state, message) {
       state.loginAttemptMessage = message;
+    },
+    setRegisterAttemptMessage: function setRegisterAttemptMessage(state, message) {
+      state.registerAttemptMessage = message;
     }
   },
   actions: {
-    login: function login(_ref, data) {
+    register: function register(_ref, data) {
       var commit = _ref.commit;
+      return new Promise(function (resolve, reject) {
+        axios({
+          url: 'api/register',
+          data: data,
+          method: 'POST'
+        }).then(function (resp) {
+          var token = resp.data.success.token;
+          commit('setToken', token);
+          commit('setLayout', 'app');
+          commit('setRegisterAttemptMessage', '');
+          resolve(resp);
+        })["catch"](function (err) {
+          var statusCode = err.response.status;
+          var responseData = err.response.data;
+
+          if (statusCode === 401) {
+            commit('setRegisterAttemptMessage', 'Registration failed');
+          } else if (statusCode === 422) {
+            if (typeof responseData.errors.email !== 'undefined') {
+              commit('setRegisterAttemptMessage', responseData.errors.email[0]);
+            } else {
+              commit('setRegisterAttemptMessage', 'Invalid data for registration');
+            }
+          } else {
+            commit('setRegisterAttemptMessage', 'Registration failed');
+          }
+
+          reject(err);
+        });
+      });
+    },
+    login: function login(_ref2, data) {
+      var commit = _ref2.commit;
       return new Promise(function (resolve, reject) {
         axios({
           url: 'api/login',
           data: data,
           method: 'POST'
-        })["catch"](function (err) {
-          if (err.response.status === 401) {
-            commit('setLoginAttemptMessage', 'Authentication failed');
-          }
-
-          reject(err);
         }).then(function (resp) {
           var token = resp.data.success.token;
           commit('setToken', token);
           commit('setLayout', 'app');
           commit('setLoginAttemptMessage', '');
           resolve(resp);
+        })["catch"](function (err) {
+          if (err.response.status === 401) {
+            commit('setLoginAttemptMessage', 'Authentication failed');
+          }
+
+          reject(err);
         });
       });
     },
-    logout: function logout(_ref2) {
-      var commit = _ref2.commit;
+    logout: function logout(_ref3) {
+      var commit = _ref3.commit;
       commit('setToken', false);
       commit('setLayout', 'public');
     }
@@ -67005,6 +67314,9 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__
     },
     loginAttemptMessage: function loginAttemptMessage(state) {
       return state.loginAttemptMessage;
+    },
+    registerAttemptMessage: function registerAttemptMessage(state) {
+      return state.registerAttemptMessage;
     }
   }
 }));

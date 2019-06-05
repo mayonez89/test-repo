@@ -38,8 +38,12 @@
             async loginAttempt() {
                 let isValid = await this.$validator.validateAll()
                 if (isValid) {
-                    await this.login({email: this.email, password: this.password})
-                    this.$router.push({path: '/app'})
+                    try {
+                        await this.login({email: this.email, password: this.password})
+                        this.$router.push({path: '/app'})
+                    } catch (e) {
+                        console.log(e)
+                    }
                 }
             }
         }
