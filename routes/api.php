@@ -18,6 +18,7 @@ Route::post('register', 'API\UserController@register');
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::resources([
-       'projects' => 'Api\ProjectsController'
+       'projects' => 'Api\ProjectsController',
+       'projects.fields' => 'Api\ProjectFieldsController'
     ]);
 });

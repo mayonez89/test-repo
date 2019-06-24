@@ -42,6 +42,15 @@ export default new Vuex.Store({
             let projectIndex = projects.findIndex((proj) => proj.id === payload.id)
             projects[projectIndex] = payload
             state.projects = projects
+        },
+        putField (state, payload) {
+            let projects = _.clone(state.projects)
+            let projectIndex = projects.findIndex((proj) => proj.id === payload.projectId)
+            projects[projectIndex].fields.push({
+                'key': payload.key,
+                'value': payload.value
+            })
+            state.projects = projects
         }
     },
     actions: {
@@ -122,6 +131,20 @@ export default new Vuex.Store({
                     method: 'PUT'
                 }).then(resp => {
                     commit('setProject', project)
+                    resolve(resp);
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        putField({commit}, field) {
+            return new Promise((resolve, reject) => {
+                axios({
+                    url: 'api/projects/' + field.projectId + '/fields',
+                    data: field,
+                    method: 'POST'
+                }).then(resp => {
+                    commit('putField', field)
                     resolve(resp);
                 }).catch(err => {
                     reject(err)

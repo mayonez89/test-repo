@@ -1741,15 +1741,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['project'],
   data: function data() {
     return {
-      editing: false
+      editing: false,
+      newKey: '',
+      newValue: ''
     };
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(['updateProject']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(['updateProject', 'putField']), {
     toggleEditing: function toggleEditing() {
       this.editing = !this.editing;
     },
@@ -1780,6 +1794,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return save;
+    }(),
+    addField: function () {
+      var _addField = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.putField({
+                  key: this.newKey,
+                  value: this.newValue,
+                  projectId: this.project.id
+                });
+
+              case 2:
+                this.newKey = '';
+                this.newValue = '';
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function addField() {
+        return _addField.apply(this, arguments);
+      }
+
+      return addField;
     }()
   })
 });
@@ -50509,7 +50556,17 @@ var render = function() {
               _vm._v(" "),
               _c("div", [_vm._v("Live Url" + _vm._s(_vm.project.live_url))]),
               _vm._v(" "),
-              _c("div", [_vm._v("Stage Url" + _vm._s(_vm.project.stage_url))])
+              _c("div", [_vm._v("Stage Url" + _vm._s(_vm.project.stage_url))]),
+              _vm._v(" "),
+              _c(
+                "ul",
+                _vm._l(_vm.project.fields, function(field, i) {
+                  return _c("li", { key: i }, [
+                    _vm._v(_vm._s(field.key) + ": " + _vm._s(field.value))
+                  ])
+                }),
+                0
+              )
             ])
           : _vm._e(),
         _vm._v(" "),
@@ -50599,7 +50656,59 @@ var render = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
-        _c("div", { on: { click: _vm.toggleEditing } }, [_vm._v("EDIT/CLOSE")])
+        _c("div", { on: { click: _vm.toggleEditing } }, [_vm._v("EDIT/CLOSE")]),
+        _vm._v(
+          "\n\n    //////////////////////////////////////////////////////////\n    "
+        ),
+        _c("div", [
+          _c("label", { attrs: { for: "" } }, [_vm._v("Key")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.newKey,
+                expression: "newKey"
+              }
+            ],
+            attrs: { type: "text" },
+            domProps: { value: _vm.newKey },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.newKey = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("label", { attrs: { for: "" } }, [_vm._v("Value")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.newValue,
+                expression: "newValue"
+              }
+            ],
+            attrs: { type: "text" },
+            domProps: { value: _vm.newValue },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.newValue = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("div", { on: { click: _vm.addField } }, [_vm._v("save")])
+        ])
       ])
     : _vm._e()
 }
@@ -67613,6 +67722,18 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__
       });
       projects[projectIndex] = payload;
       state.projects = projects;
+    },
+    putField: function putField(state, payload) {
+      var projects = _.clone(state.projects);
+
+      var projectIndex = projects.findIndex(function (proj) {
+        return proj.id === payload.projectId;
+      });
+      projects[projectIndex].fields.push({
+        'key': payload.key,
+        'value': payload.value
+      });
+      state.projects = projects;
     }
   },
   actions: {
@@ -67699,6 +67820,21 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__
           method: 'PUT'
         }).then(function (resp) {
           commit('setProject', project);
+          resolve(resp);
+        })["catch"](function (err) {
+          reject(err);
+        });
+      });
+    },
+    putField: function putField(_ref6, field) {
+      var commit = _ref6.commit;
+      return new Promise(function (resolve, reject) {
+        axios({
+          url: 'api/projects/' + field.projectId + '/fields',
+          data: field,
+          method: 'POST'
+        }).then(function (resp) {
+          commit('putField', field);
           resolve(resp);
         })["catch"](function (err) {
           reject(err);

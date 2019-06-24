@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Projects;
+use App\ProjectFields;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
-class ProjectsController extends Controller
+class ProjectFieldsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($projectId)
     {
-        return Projects::with('fields')->get();
+
     }
 
     /**
@@ -23,7 +24,7 @@ class ProjectsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($projectId)
     {
         //
     }
@@ -34,9 +35,14 @@ class ProjectsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($projectId, Request $request)
     {
-        //
+        $field = new ProjectFields();
+        $field->key = $request->get('key');
+        $field->value = $request->get('value');
+        $field->project_id = $projectId;
+
+        $field->save();
     }
 
     /**
@@ -45,7 +51,7 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($projectId, $id)
     {
         //
     }
@@ -56,7 +62,7 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($projectId, $id)
     {
         //
     }
@@ -68,9 +74,9 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($projectId, Request $request, $id)
     {
-        Projects::find($id)->update($request->only(['name', 'description', 'live_url', 'stage_url']));
+        //
     }
 
     /**
@@ -79,7 +85,7 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($projectId, $id)
     {
         //
     }
